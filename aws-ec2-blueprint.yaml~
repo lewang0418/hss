@@ -1,0 +1,96 @@
+tosca_definitions_version: cloudify_dsl_1_2
+
+description: >
+  This Blueprint installs vHSS application
+  on an amazon ec2 cloud environment.
+
+imports:
+  - http://www.getcloudify.org/spec/cloudify/3.3.1/types.yaml
+  - http://www.getcloudify.org/spec/aws-plugin/1.3.1/plugin.yaml
+  - http://www.getcloudify.org/spec/diamond-plugin/1.3.1/plugin.yaml
+  - types/aws-ec2-types.yaml
+
+#####################################################################################
+# inputs section allows the user to use same
+# blueprint for creating different deployments, each one
+# with its own parameters.
+# to specify deployment inputs run:
+#   - cfy deployments create -b <blueprint_id> -d <deployment_id> -i inputs.json
+#####################################################################################
+
+inputs:
+
+  image:
+    description: >
+      Image to be used when launching agent VM's
+
+  size:
+    description: >
+      Flavor of the agent VM's
+
+  agent_user:
+    description: >
+      User for connecting to agent VM's
+
+  dns_ip:
+    description: >
+      DNS server IP address
+
+node_templates:
+
+  hss:
+    type: cloudify.nodes.SoftwareComponent
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create: scripts/install-hss.sh
+        start: 
+            implementation: scripts/start-hss.sh
+            inputs:
+                public_ip: { get_attribute: [ hss_ip, aws_resource_id ] }
+                dns_ip: { get_input: dns_ip }
+        stop:
+            implementation: scripts/stop-hss.sh
+            inputs:
+                public_ip: { get_attribute: [ hss_ip, aws_resource_id ] }
+                dns_ip: { get_input: dns_ip }
+    relationships:
+      - type: cloudify.relationships.contained_in
+        target: hss_host
+
+  hss_host:
+    type: hss.nodes.MonitoredServer
+    relationships:
+      - type: cloudify.aws.relationships.instance_connected_to_security_group
+        target: hss_security_group
+      - type: cloudify.aws.relationships.instance_connected_to_elastic_ip
+        target: hss_ip
+
+  hss_security_group:
+    type: cloudify.aws.nodes.SecurityGroup
+    properties:
+      description: Security Group for HSS VMs
+      rules:
+        - ip_protocol: tcp
+          from_port: 3868
+          to_port: 3868
+          cidr_ip: 0.0.0.0/0
+        - ip_protocol: tcp
+          from_port: 8080
+          to_port: 8080
+          cidr_ip: 0.0.0.0/0
+
+  hss_ip:
+    type: cloudify.aws.nodes.ElasticIP
+
+###########################################################
+# This outputs section exposes the application endpoint.
+# You can access it by running:
+#   - cfy deployments -d <deployment_id> outputs
+###########################################################
+
+outputs:
+  endpoint:
+    description: Web application endpoint
+    value:
+      ip_address: { get_attribute: [ hss_ip, aws_resource_id ] }
+      port: { get_property: [hss, port] }
