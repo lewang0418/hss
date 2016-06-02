@@ -93,4 +93,4 @@ outputs:
     description: Web application endpoint
     value:
       ip_address: { get_attribute: [ hss_ip, aws_resource_id ] }
-      port: 8080
+      port: 3868
