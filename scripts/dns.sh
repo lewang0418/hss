@@ -1,7 +1,12 @@
 #!/bin/bash
 ctx logger info "Updating DNS..."
 
+
 public_ip=$(ctx instance runtime_properties public_ip)
+echo "$public_ip"
+public_ip=`cat /home/ubuntu/public_ip`
+echo "$public_ip"
+
 ctx instance runtime-properties dns_ip ${dns_ip}
 
 cat > /home/ubuntu/resolv.conf << EOF
