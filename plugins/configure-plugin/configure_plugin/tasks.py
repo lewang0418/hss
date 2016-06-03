@@ -20,7 +20,7 @@ import os
 @workflow
 def config_dns(ctx, endpoint, **kwargs):
     # setting node instance runtime property
-    ctx.logger.info('workflow parameter: {0}:{1}'.format(endpoint['ip_address']))
+    ctx.logger.info('workflow parameter: {0}'.format(endpoint['ip_address']))
     
     nodes = ['hss']
     graph = ctx.graph_mode()
