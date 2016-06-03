@@ -9,6 +9,9 @@ kill -9 ${PID}
 
 ctx logger info "Sucessfully stopped OpenImsCore HSS (${PID})"
 
+public_ip=$(ctx instance runtime_properties public_ip)
+dns_ip=$(ctx instance runtime_properties dns_ip)
+
 retries=0
 cat > /home/ubuntu/dnsupdatefile << EOF
 server ${dns_ip}

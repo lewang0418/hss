@@ -10,6 +10,19 @@ imports:
   - http://www.getcloudify.org/spec/diamond-plugin/1.3.1/plugin.yaml
   - types/aws-ec2-types.yaml
 
+plugins:
+    configure-plugin:
+        executor: host_agent
+        source: configure-plugin
+
+workflows:
+  config-dns:
+        mapping: configure-plugin.dns_plugin.tasks.config_dns
+        parameters:
+            endpoint:
+                description: parameters passed form another deployment
+
+
 #####################################################################################
 # inputs section allows the user to use same
 # blueprint for creating different deployments, each one
@@ -32,10 +45,6 @@ inputs:
     description: >
       User for connecting to agent VM's
 
-  dns_ip:
-    description: >
-      DNS server IP address
-
 node_templates:
 
   hss:
@@ -43,16 +52,12 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create: scripts/install-hss.sh
-        start: 
-            implementation: scripts/start-hss.sh
+            implementation: scripts/install-hss.sh
             inputs:
                 public_ip: { get_attribute: [ hss_ip, aws_resource_id ] }
-                dns_ip: { get_input: dns_ip }
-        stop:
-            implementation: scripts/stop-hss.sh
-            inputs:
-                public_ip: { get_attribute: [ hss_ip, aws_resource_id ] }
-                dns_ip: { get_input: dns_ip }
+        start: scripts/start-hss.sh
+        configure-dns: scripts/dns.sh
+        stop: scripts/stop-hss.sh
     relationships:
       - type: cloudify.relationships.contained_in
         target: hss_host
@@ -94,3 +99,4 @@ outputs:
     value:
       ip_address: { get_attribute: [ hss_ip, aws_resource_id ] }
       port: 3868
+      domain: hss.example.com

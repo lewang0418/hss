@@ -23,10 +23,10 @@ sed -i -e 's/open-ims.test/example.com/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_PROPERTY_FILE
 
-
+curl  https://raw.githubusercontent.com/lewang0418/hss/master/scripts/hss_db.sql > $FHOSS_PATH"/scripts/hss_db.sql"
 mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/hss_db.sql"
 mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/userdata.sql"
 
 ctx instance runtime-properties hss_path ${FHOSS_PATH}
-
+ctx instance runtime_properties public_ip $(public_ip)
 
