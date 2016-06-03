@@ -51,7 +51,7 @@ node_templates:
     type: cloudify.nodes.SoftwareComponent
     interfaces:
       cloudify.interfaces.lifecycle:
-        create: scripts/install-hss.sh
+        create:
             implementation: scripts/install-hss.sh
             inputs:
                 public_ip: { get_attribute: [ hss_ip, aws_resource_id ] }
