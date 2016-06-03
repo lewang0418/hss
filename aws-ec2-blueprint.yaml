@@ -17,7 +17,7 @@ plugins:
 
 workflows:
   config-dns:
-        mapping: configure-plugin.dns_plugin.tasks.config_dns
+        mapping: configure-plugin.configure_plugin.tasks.config_dns
         parameters:
             endpoint:
                 description: parameters passed form another deployment
