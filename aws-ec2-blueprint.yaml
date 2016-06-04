@@ -32,15 +32,12 @@ workflows:
 #####################################################################################
 
 inputs:
-
   image:
     description: >
       Image to be used when launching agent VM's
-
   size:
     description: >
       Flavor of the agent VM's
-
   agent_user:
     description: >
       User for connecting to agent VM's

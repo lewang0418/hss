@@ -29,4 +29,4 @@ mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/userdata.sql"
 
 ctx instance runtime-properties hss_path ${FHOSS_PATH}
 ctx instance runtime_properties public_ip ${public_ip}
-$(public_ip) > /home/ubuntu/public_ip
+${public_ip} > /home/ubuntu/public_ip
