@@ -1,5 +1,4 @@
 image: ami-f95ef58a
 size: t2.medium
 agent_user: ubuntu
-dns_ip: 52.208.12.159
 
