@@ -17,15 +17,19 @@ ant deploy
 FHOSS_PATH=`pwd`
 HSS_DIAMETER_FILE=$FHOSS_PATH"/deploy/DiameterPeerHSS.xml"
 HSS_PROPERTY_FILE=$FHOSS_PATH"/deploy/hss.properties"
+HIBERNATE_PROPERTY_FILE=$FHOSS_PATH"/deploy/hibernate.properties"
 
 sed -i -e 's/open-ims.test/example.com/' $HSS_DIAMETER_FILE
 sed -i -e 's/open-ims.test/example.com/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_PROPERTY_FILE
+sed -i -e 's/hibernate.connection.username=hss/hibernate.connection.username=root/' $HIBERNATE_PROPERTY_FILE
+sed -i -e 's/hibernate.connection.password=hss/hibernate.connection.password=root/' $HIBERNATE_PROPERTY_FILE
 
-mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/userdata.sql"
 curl  https://raw.githubusercontent.com/lewang0418/hss/master/scripts/hss_db.sql > $FHOSS_PATH"/scripts/hss_db.sql"
 mysql -uroot -proot -h localhost hss_db < $FHOSS_PATH"/scripts/hss_db.sql"
+#mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/hss_db.sql"
+mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/userdata.sql"
 
 ctx instance runtime_properties public_ip ${public_ip}
 echo ${public_ip} > /home/ubuntu/public_ip
