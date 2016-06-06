@@ -26,10 +26,6 @@ sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_PROPERTY_FILE
 sed -i -e 's/hibernate.connection.username=hss/hibernate.connection.username=root/' $HIBERNATE_PROPERTY_FILE
 sed -i -e 's/hibernate.connection.password=hss/hibernate.connection.password=root/' $HIBERNATE_PROPERTY_FILE
 
-curl  https://raw.githubusercontent.com/lewang0418/hss/master/scripts/hss_db.sql > $FHOSS_PATH"/scripts/hss_db.sql"
-mysql -uroot -proot -h localhost hss_db < $FHOSS_PATH"/scripts/hss_db.sql"
-#mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/hss_db.sql"
-mysql -uroot -proot -h localhost < $FHOSS_PATH"/scripts/userdata.sql"
-
 ctx instance runtime_properties public_ip ${public_ip}
+ctx instance runtime_properties fhoss_path ${FHOSS_PATH}
 echo ${public_ip} > /home/ubuntu/public_ip
