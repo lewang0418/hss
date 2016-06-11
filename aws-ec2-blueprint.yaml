@@ -94,6 +94,6 @@ outputs:
   endpoint:
     description: Web application endpoint
     value:
-      ip_address: { get_attribute: [ hss_ip, aws_resource_id ] }
-      port: 3868
-      domain: hss.example.com
+      hss_address: { get_attribute: [ hss_ip, aws_resource_id ] }
+      hss_port: 3868
+      hss_domain: hss.example.com
