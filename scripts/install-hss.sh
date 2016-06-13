@@ -21,6 +21,8 @@ HIBERNATE_PROPERTY_FILE=$FHOSS_PATH"/deploy/hibernate.properties"
 
 sed -i -e 's/open-ims.test/example.com/' $HSS_DIAMETER_FILE
 sed -i -e 's/open-ims.test/example.com/' $HSS_DIAMETER_FILE
+sed -i -e 's/icscf.example.com/icscf.sprout.example.com/' $HSS_DIAMETER_FILE
+sed -i -e 's/scscf.example.com/icscf.sprout.example.com/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_DIAMETER_FILE
 sed -i -e 's/127.0.0.1/0.0.0.0/' $HSS_PROPERTY_FILE
 sed -i -e 's/hibernate.connection.username=hss/hibernate.connection.username=root/' $HIBERNATE_PROPERTY_FILE
